@@ -11,9 +11,10 @@ class AlumnosAsignadosGrupoModel extends Conexion
     public function traerAlumnosGrupoId($id)
     {
         $sql = "select * from alumnosAsignadosGrupo  where idGrupo = '".$id."' ";
+        // die($sql); 
         $consulta = mysql_query($sql,$this->connectMysql());
-        $cliente = mysql_fetch_assoc($consulta);
-        return $cliente;
+        $alumnos = $this->get_table_assoc($consulta);
+        return $alumnos;
     }
 
 

@@ -3,7 +3,8 @@ $raiz = dirname(dirname(dirname(__file__)));
 require_once($raiz.'/grupos/models/GrupoModel.php'); 
 require_once($raiz.'/alumnosAsignadosGrupo/models/AlumnosAsignadosGrupoModel.php'); 
 require_once($raiz.'/profesores/models/ProfesorModel.php'); 
-require_once($raiz.'/clientes/models/ClienteModel.php'); 
+require_once($raiz.'/alumnos/models/AlumnoModel.php'); 
+require_once($raiz.'/asistencia/models/AsistenciaModel.php'); 
 // require_once($raiz.'/clientes/models/TipoContribuyenteModel.php'); 
 // require_once($raiz.'/subtipos/models/SubtipoParteModel.php'); 
 // require_once($raiz.'/marcas/models/MarcaModel.php'); 
@@ -15,13 +16,15 @@ class gruposView
  protected $modelAlumnosAsignados;
  protected $modelProfesor;
  protected $alumnoModel;
+ protected $asistenciaModel;
 
  public function __construct()
  {
     $this->model= new GrupoModel(); 
     $this->modelAlumnosAsignados = new AlumnosAsignadosGrupoModel();
     $this->modelProfesor = new ProfesorModel();
-    $this->alumnoModel = new ClienteModel();
+    $this->alumnoModel = new AlumnoModel();
+    $this->asistenciaModel = new AsistenciaModel();
     // $this->tipoContriModel= new TipoContribuyenteModel(); 
  }   
  public function gruposMenu($grupos)
@@ -57,6 +60,7 @@ class gruposView
 
         <?php   $this->modalNuevoCliente(); ?>
         <?php   $this->modalIntegrantes(); ?>
+        <?php   $this->modalFecha(); ?>
     </div>
     <?php
  }
@@ -132,6 +136,30 @@ class gruposView
                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
              <div class="modal-body" id="modalBodyIntegrantes">
+                 
+             </div>
+             <div class="modal-footer">
+                 <!-- <button  type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="listarGrupos();" >Cerrar</button>
+                 <button  type="button" class="btn btn-primary"  id="btnEnviar"  onclick="grabarGrupo();" >Grabar Grupo</button> -->
+             </div>
+             </div>
+         </div>
+         </div>
+
+     <?php
+ }
+ public function modalFecha()
+ {
+     ?>
+         <!-- Modal -->
+         <div class="modal fade" id="modalFecha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+             <div class="modal-content">
+             <div class="modal-header">
+                 <h1 class="modal-title fs-5" id="exampleModalLabel">Asistencia Fecha</h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body" id="modalBodyFecha">
                  
              </div>
              <div class="modal-footer">
@@ -232,28 +260,47 @@ class gruposView
     $asignados =  $this->modelAlumnosAsignados->traerAlumnosGrupoId($idGrupo);  
     $infoProfesor = $this->modelProfesor->traerClienteFiltrado($infoGrupo['idProfesor']);
     $infoAlumno = $this->alumnoModel->traerClienteFiltrado($infoGrupo['idProfesor']);
+    $infoFechas = $this->asistenciaModel->traerFechasIdAsignacion($idGrupo);
 
     // echo '<pre>'; 
-    // print_r($infoProfesor); 
+    // print_r($infoFechas); 
     // echo '</pre>';
     // die();
+
+    echo '   <div class="col-lg-6">
+                <button 
+                data-bs-toggle="modal" 
+                data-bs-target="#modalFecha"
+                class="btn btn-primary" 
+                onclick="agregarFechaAsistencia($idGrupo);"
+                >Agregar Fecha</button>
+            </div>'; 
+            
     echo '<div>Profesor: <b>'.$infoProfesor['nombre'].'</b> </div>';
     echo '<table class="table table-striped">';
     echo '<tr>'; 
  
     echo '<th>Alumno</th>';
-    echo '<th>Ver</th>';
- 
-   
-    // echo '<th>TipoCont.</th>';
-    // echo '<th>Sede.</th>';
+    foreach($infoFechas as $fecha)
+    { echo '<th>'.$fecha['fecha'].'</th>';}
+
     echo '</tr>';
     foreach($asignados as $asignado)
     {
         // $tipoCont =  $this->tipoContriModel->traerTipoId($cliente['idTipoContribuyente']);
         $infoAlumno =     $this->alumnoModel->traerClienteFiltrado($asignado['idAlumno']); 
+        $fechas =  $this->asistenciaModel->traerAsistenciaIdAsignacion($asignado['id']); 
+        // echo '<pre>'; 
+        // print_r($infoAsistencia); 
+        // echo '</pre>';
+        // die();
         echo '<tr>'; 
-        echo '<td>'.$asignado['idAlumno'].'</td>'; 
+        echo '<td>'.$infoAlumno['nombre'].'</td>'; 
+        foreach($fechas as $fecha)
+        {
+            // echo '<td>'.$fecha['fecha'].'</td>'; 
+            echo '<td align="center">'.$fecha['asistio'].'</td>'; 
+        }
         echo '</tr>';
     }
     echo '</table>';

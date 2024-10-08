@@ -81,6 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="profesores/js/clientes.js"></script>  
         <script src="grupos/js/grupos.js"></script>  
         <script src="alumnos/js/alumnos.js"></script>  
+        <script src="asistencia/js/asistencia.js"></script>  
         <script>
         function CargarContenido(pagina_php,contenedor)
         {
