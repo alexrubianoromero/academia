@@ -26,68 +26,19 @@ class asistenciaController
         // $this->partesModel = new PartesModel();
         // $this->MovParteModel = new MovimientoParteModel();
 
-        if($_REQUEST['opcion']=='listarClientes')
+        if($_REQUEST['opcion']=='actualizarAsistencia')
         {
-            $this->listarClientes();
+            // echo '<pre>'; 
+            // print_r($_REQUEST); 
+            // echo '</pre>';
+            // die();
+            $this->actualizarAsistencia($_REQUEST);
         }
-        if($_REQUEST['opcion']=='listarClienteFiltrado')
-        {
-            $this->listarClienteFiltrado($_REQUEST);
-        }
-        if($_REQUEST['opcion']=='listarClienteFiltradoDesdeClientes')
-        {
-            $this->listarClienteFiltradoDesdeClientes($_REQUEST);
-        }
-        if($_REQUEST['opcion']=='alumnosMenu')
-        {
-            $this->alumnosMenu();
-        }
-
-        if($_REQUEST['opcion']=='formuNuevoCliente')
-        {
-            // die('llego a nuevo cliente');
-            $this->formuNuevoCliente();
-        }
-        if($_REQUEST['opcion']=='grabarCliente')
-        {
-            // die('llego a nuevo cliente');
-            $this->grabarCliente($_REQUEST);
-        }
-        
-
+      
     }
-    public function listarClientes()
+    public function actualizarAsistencia($request)
     {
-        $clientes = $this->model->traerClientes();
-        $this->view->mostrarCLientes($clientes);   
-    }
-    public function listarClienteFiltrado($request)
-    {
-        $clientes = $this->model->traerClienteFiltrado($request['idCliente']); 
-        $this->view->mostrarCLientes($clientes);   
-    }
-    public function listarClienteFiltradoDesdeClientes($request)
-    {
-        $clientes = $this->model->traerClienteFiltrado2($request['idCliente']); 
-        // echo '<pre>'; print_r($clientes); echo '</pre>';
-        // die(); 
-        $this->view->mostrarCLientes($clientes);   
-    }
-    public function alumnosMenu()
-    {
-        $clientes = $this->model->traerClientes();
-        $this->view->clientesMenu($clientes);   
-    }
-    public function formuNuevoCliente()
-    {
-        // $clientes = $this->model->traerClientes();
-        $this->view->formuNuevoCliente();   
-    }
-    public function grabarCliente($request)
-    {
-        // $clientes = $this->model->traerClientes();
-        $this->model->grabarCliente($request);   
-        echo 'Cliente grabado!';
+        $this->model->actualizarAsistencia($request);
     }
     
 }    

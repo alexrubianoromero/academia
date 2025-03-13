@@ -72,7 +72,8 @@ class gruposView
         echo '<tr>'; 
         echo '<th>Id Grupo</th>';
         echo '<th>Nombre Grupo</th>';
-        echo '<th>Ver</th>';
+        echo '<th>Asistencia</th>';
+        echo '<th>Alumnos</th>';
      
        
         // echo '<th>TipoCont.</th>';
@@ -90,9 +91,11 @@ class gruposView
                 data-bs-target="#modalIntegrantes"
                 class="btn btn-primary" 
                 onclick="verIntegratesGrupo('.$grupo['id'].');"
-                >Integrantes</button>';
-
-            echo  '</td>'; 
+                >Asistencia</button>';
+            echo  '</td>';
+            
+         
+            
             
             // echo '<td>'.$tipoCont['descripcion'].'</td>'; 
             // echo '<td>'.$cliente['sede'].'</td>'; 
@@ -128,8 +131,8 @@ class gruposView
  {
      ?>
          <!-- Modal -->
-         <div class="modal fade" id="modalIntegrantes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
+         <div class="modal fade " id="modalIntegrantes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-lg">
              <div class="modal-content">
              <div class="modal-header">
                  <h1 class="modal-title fs-5" id="exampleModalLabel">Integrantes Grupo</h1>
@@ -253,9 +256,39 @@ class gruposView
 
      <?php
  }
+ public function soloMostrarAlumnosGrupo($idGrupo)
+ {
+    $infoGrupo = $this->model->traerGrupoId($idGrupo);
+    $asignados =  $this->modelAlumnosAsignados->traerAlumnosGrupoId($idGrupo);  
+    $infoProfesor = $this->modelProfesor->traerClienteFiltrado($infoGrupo['idProfesor']);
+    $infoAlumno = $this->alumnoModel->traerClienteFiltrado($infoGrupo['idProfesor']);
+    echo '<table class="table table-striped">';
+    echo '<tr>'; 
+    echo '<th>Alumno</th>';
+    foreach($asignados as $asignado)
+    {
+        // $tipoCont =  $this->tipoContriModel->traerTipoId($cliente['idTipoContribuyente']);
+        $infoAlumno =     $this->alumnoModel->traerClienteFiltrado($asignado['idAlumno']); 
+        // echo '<pre>'; 
+        // print_r($infoAsistencia); 
+        // echo '</pre>';
+        // die();
+        echo '<tr>'; 
+        echo '<td>'.$infoAlumno['nombre'].'</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+ }
 
  public function verIntegratesGrupo($idGrupo)
  {
+    // die('aignados');
+    
+    $existeFecha = $this->asistenciaModel->revisarSiExisteFechaenAsistenciaIdGrupo($idGrupo);
+    // die('cuantas fechas '.$existeFecha);
+    if($existeFecha==0){
+        $this->asistenciaModel->crearFechaAsistencia($idGrupo);
+    }
     $infoGrupo = $this->model->traerGrupoId($idGrupo);
     $asignados =  $this->modelAlumnosAsignados->traerAlumnosGrupoId($idGrupo);  
     $infoProfesor = $this->modelProfesor->traerClienteFiltrado($infoGrupo['idProfesor']);
@@ -275,16 +308,17 @@ class gruposView
                 onclick="agregarFechaAsistencia($idGrupo);"
                 >Agregar Fecha</button>
             </div>'; 
-            
+
+        
     echo '<div>Profesor: <b>'.$infoProfesor['nombre'].'</b> </div>';
     echo '<table class="table table-striped">';
     echo '<tr>'; 
- 
     echo '<th>Alumno</th>';
     foreach($infoFechas as $fecha)
     { echo '<th>'.$fecha['fecha'].'</th>';}
-
     echo '</tr>';
+
+
     foreach($asignados as $asignado)
     {
         // $tipoCont =  $this->tipoContriModel->traerTipoId($cliente['idTipoContribuyente']);
@@ -298,8 +332,16 @@ class gruposView
         echo '<td>'.$infoAlumno['nombre'].'</td>'; 
         foreach($fechas as $fecha)
         {
-            // echo '<td>'.$fecha['fecha'].'</td>'; 
-            echo '<td align="center">'.$fecha['asistio'].'</td>'; 
+            //aqui viene una pregunta si es del mismo dia 
+            // echo '<td align="center">'.$fecha['asistio'].'</td>'; 
+            echo '<td>'; 
+            if($fecha['asistio']==1){
+                echo '<input type="checkbox" checked id="'.$fecha['id'].'"  onclick="actualizarAsistencia(this,'.$fecha['id'].','.$idGrupo.');" >'; 
+            }else{
+                echo '<input type="checkbox"  id="'.$fecha['id'].'"  onclick="actualizarAsistencia(this,'.$fecha['id'].','.$idGrupo.');" >'; 
+            }
+            
+            echo '</td>';
         }
         echo '</tr>';
     }

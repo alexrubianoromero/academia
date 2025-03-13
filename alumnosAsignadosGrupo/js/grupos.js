@@ -31,6 +31,24 @@ function verIntegratesGrupo(idGrupo)
         +'&idGrupo='+idGrupo
     );
 }
+
+function soloMostrarAlumnosGrupo(idGrupo)
+{
+    //  alert('funcion javascript');
+    const http=new XMLHttpRequest();
+    const url = 'grupos/grupos.php';
+    http.onreadystatechange = function(){
+
+        if(this.readyState == 4 && this.status ==200){
+               document.getElementById("modalBodyIntegrantes").innerHTML  = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send('opcion=soloMostrarAlumnosGrupo'
+        +'&idGrupo='+idGrupo
+    );
+}
 function listarClienteFiltrado()
 {
     //  alert('funcion javascript');

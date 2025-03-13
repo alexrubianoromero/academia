@@ -12,7 +12,7 @@ class asistenciaView
 
  public function __construct()
  {
-    $this->model= new AlumnoModel(); 
+    $this->model= new AsistenciaModel(); 
     // $this->tipoContriModel= new TipoContribuyenteModel(); 
  }   
  public function clientesMenu($clientes)

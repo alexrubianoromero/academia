@@ -217,9 +217,9 @@ class alumnosAsignadosGruposView
      <?php
  }
 
- public function verIntegratesGrupo($idGrupo)
- {
-        echo 'idgrupo '.$idGrupo;
- }
+//  public function verIntegratesGrupo($idGrupo)
+//  {
+//         echo 'idgrupo '.$idGrupo;
+//  }
 
 }

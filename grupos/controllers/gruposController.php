@@ -66,8 +66,20 @@ class gruposController
             $this->view->verIntegratesGrupo($_REQUEST['idGrupo']);
         }
         
+        
+        if($_REQUEST['opcion']=='formuAgregarAlumnoGrupo')
+        {
+            // die('llego a nuevo cliente');
+            $this->view->formuAgregarAlumnoGrupo($_REQUEST['idGrupo']);
+        }
+        
 
     }
+
+
+
+
+
     public function listarGrupos()
     {
         $clientes = $this->model->traerGrupos();

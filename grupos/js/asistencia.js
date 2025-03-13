@@ -114,6 +114,31 @@ function grabarGrupo()
     );
 
 }
+function formuAgregarAlumnoGrupo(idGrupo)
+{
+    //  alert('funcion javascript');
+    // var nombre = document.getElementById('nombre').value;
+   
+    // var idTipoContribuyente = document.getElementById('idTipoContribuyente').value;
+    // var sede = document.getElementById('sede').value;
+    const http=new XMLHttpRequest();
+    const url = 'grupos/grupos.php';
+    http.onreadystatechange = function(){
+
+        if(this.readyState == 4 && this.status ==200){
+               document.getElementById("div_agregarAlumnoGrupo").innerHTML  = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send('opcion=formuAgregarAlumnoGrupo'
+    +'&idGrupo='+idGrupo
+   
+    // +'&idTipoContribuyente='+idTipoContribuyente
+    // +'&sede='+sede
+    );
+
+}
 
 
 
